@@ -1,0 +1,122 @@
+﻿<Window x:Class="TP_Gestion.Views.R._Vecinos.AltaVecinoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:TP_Gestion.Views.R._Vecinos"
+        mc:Ignorable="d"
+        Title="AltaVecinoWindow" Height="570" Width="450" 
+        Background="{StaticResource SecondaryColor}" 
+        WindowStyle="None" 
+        WindowStartupLocation="CenterScreen">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="{Binding WindowTitle}" Foreground="{StaticResource ThirdColor}" FontSize="26" 
+                   VerticalAlignment="Center" HorizontalAlignment="Center" 
+                   FontWeight="Bold" Grid.ColumnSpan="2"/>
+        
+        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center"
+                    Grid.Row="1" Grid.ColumnSpan="2">
+            <StackPanel Orientation="Horizontal" Height="60">
+                <TextBlock Foreground="Black" Text="Nombre:" 
+                           FontSize="14" VerticalAlignment="Center"/>
+                
+                <TextBox Foreground="Black"  Margin="30,0,0,0"
+                         Height="30" Width="250" 
+                         FontSize="14" VerticalAlignment="Center"
+                         x:Name="txt_nombre"
+                         BorderBrush="{StaticResource PrimaryColor}"
+                         Background="{StaticResource PrimaryColor}"
+                         Text="{Binding Persona.Nombre, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Height="60">
+                <TextBlock Foreground="Black" Text="Apellidos:" 
+                           FontSize="14" VerticalAlignment="Center"/>
+
+                <TextBox Foreground="Black" Margin="24,0,0,0"
+                         Height="30" Width="250" 
+                         FontSize="14" VerticalAlignment="Center"
+                         x:Name="txt_apellidos"
+                         Background="{StaticResource PrimaryColor}" 
+                         BorderBrush="{StaticResource PrimaryColor}"
+                         Text="{Binding Persona.Apellidos, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Height="60">
+                <TextBlock Foreground="Black" Text="Casa:" 
+                           FontSize="14" VerticalAlignment="Center"/>
+
+                <TextBox Foreground="Black"  Margin="52,0,0,0"
+                         Height="30" Width="250" 
+                         FontSize="14" VerticalAlignment="Center"
+                         x:Name="txt_casa"
+                         Background="{StaticResource PrimaryColor}"
+                         BorderBrush="{StaticResource PrimaryColor}"
+                         Text="{Binding Persona.Casa, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Height="60">
+                <TextBlock Foreground="Black" Text="Fecha de registro:" 
+                           FontSize="14" VerticalAlignment="Center"/>
+
+                <DatePicker Foreground="Black" Margin="30,0,0,0"
+                            Height="30" Width="170" 
+                            FontSize="14" VerticalAlignment="Center"
+                            Name="dp_fechaRegistro"
+                            Background="{StaticResource PrimaryColor}"
+                            BorderBrush="{StaticResource PrimaryColor}"
+                            SelectedDate="{Binding Persona.FechaRegistro}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Height="60">
+                <TextBlock Foreground="Black" Text="Tipo Vecino:" 
+                           FontSize="14" VerticalAlignment="Center"/>
+
+                <ComboBox Foreground="Black" Margin="18,0,0,0"
+                          Height="30" Width="250" 
+                          FontSize="14" VerticalAlignment="Center"
+                          x:Name="cbx_tipo"
+                          Style="{StaticResource comboBoxRed}"
+                          Background="{StaticResource PrimaryColor}" 
+                          ItemsSource="{Binding TiposPersona}"
+                          SelectedItem="{Binding SelectedTipoPersona, Mode=TwoWay}"
+                          DisplayMemberPath="Tipo"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Height="60">
+                <TextBlock Foreground="Black" Text="Alta en la asociación:" 
+                           FontSize="14" VerticalAlignment="Center"/>
+
+                <CheckBox Margin="24,0,0,0"
+                          Width="30" FontSize="14" 
+                          x:Name="check_alta"
+                          Style="{StaticResource checkStyle}"
+                          BorderBrush="{StaticResource PrimaryColor}"
+                          IsChecked="{Binding Persona.EnAlta}"/>
+            </StackPanel>
+        </StackPanel>
+
+            <Button VerticalAlignment="Center" HorizontalAlignment="Center" 
+                    Style="{StaticResource BtnStyle}" Width="120"
+                    Content="SALIR" Grid.Column="0" Grid.Row="2"
+                    FontSize="16" x:Name="btn_salir"
+                    Command="{Binding CerrarCommand}"/>
+
+        <Button VerticalAlignment="Center" HorizontalAlignment="Center" 
+                Style="{StaticResource BtnStyle}" Width="120"
+                Content="{Binding ActionButtonText}" Grid.Column="1" Grid.Row="2"
+                FontSize="16" x:Name="btn_crear"
+                Command="{Binding ActionCommand}"/>
+
+    </Grid>
+</Window>

@@ -1,0 +1,141 @@
+﻿<UserControl x:Class="TP_Gestion.Views.Cuotas.CuotasControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TP_Gestion.Views.Cuotas"
+             mc:Ignorable="d" 
+             Background="{StaticResource PrimaryColor}"
+             d:DesignHeight="800" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="CUOTAS DE VECINOS" 
+                   Foreground="{StaticResource ThirdColor}" FontSize="26" 
+                   VerticalAlignment="Center" HorizontalAlignment="Center" 
+                   FontWeight="Bold" />
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="350"/>
+
+            </Grid.ColumnDefinitions>
+            <Grid  Height="60" Grid.Column="0" HorizontalAlignment="Stretch" Width="Auto">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+
+                </Grid.ColumnDefinitions>
+
+                <TextBox Foreground="{StaticResource FourthColor}" 
+                         Background="{StaticResource SecondaryColor}"  
+                         BorderBrush="{StaticResource PrimaryColor}"
+                         Margin="20,0,0,0" FontSize="14"
+                         MinWidth="250" Height="30"  VerticalAlignment="Center" 
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+
+
+            </Grid>
+            <Grid  Height="60" Grid.Column="1" HorizontalAlignment="Stretch" Width="Auto" Margin="20,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <ComboBox Foreground="Black" Margin="18,0,20,0"
+                          FontSize="14" VerticalAlignment="Center" 
+                          Height="30" MaxWidth="300" MinWidth="100" 
+                          Grid.Column="1" 
+                          Style="{StaticResource comboBoxRed}"
+                          Background="{StaticResource SecondaryColor}"  
+                          SelectedItem="{Binding SelectedTipoFiltro}"
+                          ItemsSource="{Binding ListTipos}"
+                          SelectedIndex="0" >
+                    
+                </ComboBox>
+
+            </Grid>
+            <StackPanel Orientation="Horizontal" Height="60" Grid.Column="2" Margin="0,0,20,0">
+                <ComboBox Foreground="Black"  Grid.Column="2" Margin="20,0,20,0"
+              FontSize="14" HorizontalAlignment="Left" 
+              Height="30" MaxWidth="150" MinWidth="150" 
+              Style="{StaticResource comboBoxRed}"
+              ItemsSource="{Binding ListYears}"
+              Background="{StaticResource SecondaryColor}"  
+              SelectedItem="{Binding SelectedYear}" />
+
+                <Button Width="50" Height="50" 
+            Background="{StaticResource SecondaryColor}"
+            Style="{StaticResource BtnStyle}"
+            Command="{Binding SearchCommand}">
+                    <Button.Content>
+                        <Image x:Name="imgLupa" Source="/Images/busqueda-de-lupa.png"
+                   Height="40" Width="40"/>
+                    </Button.Content>
+                </Button>
+                <Button Width="50" Height="50" Margin="20,0,0,0"
+            Background="{StaticResource SecondaryColor}" 
+            Style="{StaticResource BtnStyle}"
+            Command="{Binding ClearSearchCommand}">
+                    <Button.Content>
+                        <Image x:Name="imgLimpiar" Source="/Images/borrar.png"
+                   Height="50" Width="50"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <DataGrid x:Name="dg_cuotas" Margin="10,30,10,30" Grid.Row="2" Grid.ColumnSpan="2" Style="{StaticResource DataGridStyle}" 
+ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridStyleCell}"
+ MinHeight="100" MinWidth="400" MaxHeight="700" MaxWidth="1600"  AutoGenerateColumns="False" IsReadOnly="False"
+        ItemsSource="{Binding Cuotas}"  SelectedItem="{Binding SelectedCuota}">
+            <DataGrid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" 
+      Command="{Binding DataGridDoubleClickCommand}"
+      CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+            </DataGrid.InputBindings>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Nº" Width="50" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="NOMBRE" Width="*" Binding="{Binding Nombre}"/>
+                <DataGridTextColumn Header="APELLIDOS" Width="*" Binding="{Binding Apellidos}"/>
+                <DataGridTextColumn Header="CASA" Width="*" Binding="{Binding Casa}"/>
+                <DataGridTextColumn Header="REGISTRO" Width="*" Binding="{Binding FechaRegistro, StringFormat=dd/MM/yyyy}"/>
+                <DataGridTemplateColumn Header="P" Width="70">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox Width="30" IsChecked="{Binding Pagado, UpdateSourceTrigger=PropertyChanged}" 
+                      Style="{StaticResource checkStyle}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="" Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Button Content="Pagar" 
+                                        Command="{Binding DataContext.PagarCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                        Style="{DynamicResource BtnStyle}"
+                                        CommandParameter="{Binding}"
+                                        Height="30"
+                                        Visibility="{Binding Pagado, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=inverse}"/>
+                                <Button Content="Deshacer" 
+                                        Command="{Binding DataContext.DeshacerPagoCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                        CommandParameter="{Binding}"
+                                        Style="{DynamicResource BtnStyle}"
+                                        Height="30"
+                                        Visibility="{Binding Pagado, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
