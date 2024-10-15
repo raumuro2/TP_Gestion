@@ -13,15 +13,12 @@ namespace TP_Gestion.Models
         {
         }
 
-        public Cuota(int id, string nombre, string apellidos, string casa, DateTime fechaRegistro, 
-            bool pagado, long idVenta)
+        public Cuota(int id, Persona persona, long idVenta, int anio, bool pagado)
         {
             Id = id;
+            Persona = persona;
             IdVenta = idVenta;
-            Nombre = nombre;
-            Apellidos = apellidos;
-            Casa = casa;
-            FechaRegistro = fechaRegistro;
+            Anio = anio;
             _pagado = pagado;
         }
 
@@ -29,10 +26,7 @@ namespace TP_Gestion.Models
         public long IdVenta { get; set; }
         public int Anio { get; set; }
         public DateTime Fecha { get; set; }
-        public string Nombre { get; set; }
-        public string Apellidos { get; set; }
-        public string Casa { get; set; }
-        public DateTime FechaRegistro { get; set; }
+        public Persona Persona { get; set; }
         private bool _pagado;
 
         public bool Pagado

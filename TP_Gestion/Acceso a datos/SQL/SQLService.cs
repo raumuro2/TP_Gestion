@@ -31,7 +31,44 @@ namespace TP_Gestion.Acceso_a_datos
 
             return _dbConnection.Insert("Persona", data, out long id);
         }
+        public bool CrearProducto(Producto producto)
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>();
 
+            if (producto.Imagen != null)
+            {
+                if (CrearImagen(producto.Imagen, out long idImagen)) data.Add("ImagenID", idImagen);
+            }
+
+            data.Add("Nombre", producto.Nombre);
+            data.Add("Precio", producto.Precio);
+            data.Add("PrecioIva", producto.PrecioIva);
+            data.Add("Fecha_creacion", producto.FechaCreacion);
+            data.Add("Fecha_modificacion", DateTime.Now);
+            data.Add("Baja", producto.Baja);
+            data.Add("Seg_stock", producto.SegStock);
+
+            bool ok = _dbConnection.Insert("Producto", data, out long id);
+            if (ok)
+            {
+                producto.Stock.IdProducto = id;
+                CrearStock(producto.Stock);
+            }
+            return ok;
+        }
+        public bool CrearStock(Stock stock)
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data.Add("Id_producto", stock.IdProducto);
+            data.Add("Stock", stock.StockProducto);
+            return _dbConnection.Insert("Stock", data, out long id);
+        }
+        public bool CrearImagen(Imagen imagen, out long idImagen)
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data.Add("Imagen", imagen.Image);
+            return _dbConnection.Insert("Imagen", data, out idImagen);
+        }
         public bool CrearVenta(Venta venta, out long id)
         {
             Dictionary<string, object> data = new Dictionary<string, object>();
@@ -40,13 +77,33 @@ namespace TP_Gestion.Acceso_a_datos
             data.Add("Total_iva", venta.TotalIva);
             data.Add("Fecha", venta.FechaVenta);
             data.Add("Observaciones", venta.Observaciones);
+            data.Add("Rectificativa", false);
             if (_dbConnection.Insert("Venta", data, out id))
             {
                 foreach (var linea in venta.LineaVentaList)
                 {
                     CrearLineaVenta(id, linea);
                 }
-                CrearMovContable(new MovContable(id, null, venta.TotalIva, false, venta.FechaVenta));
+                CrearMovContable(new MovContable(id, null, null,venta.TotalIva, false, venta.FechaVenta));
+                return true;
+            }
+            else return false;
+        }
+
+        public bool CrearVentaRectificativa(Venta venta, out long id)
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data.Add("Id_persona", venta.IdPersona);
+            data.Add("Total", venta.Total);
+            data.Add("Total_iva", venta.TotalIva);
+            data.Add("Fecha", venta.FechaVenta);
+            data.Add("Observaciones", venta.Observaciones); 
+            data.Add("Rectificativa", true);
+            data.Add("IdRectificada", venta.IdRectificada);
+
+            if (_dbConnection.Insert("Venta", data, out id))
+            {
+                CrearMovContable(new MovContable(null, null, id, venta.TotalIva, false, venta.FechaVenta));
                 return true;
             }
             else return false;
@@ -105,13 +162,52 @@ namespace TP_Gestion.Acceso_a_datos
         {
             return _dbConnection.UpdateMultiplePersonas(personas, out string errorMessage);
         }
+        public bool ActualizarProducto(Producto producto)
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data.Add("Nombre", producto.Nombre);
+            data.Add("Precio", producto.Precio);
+            data.Add("PrecioIva", producto.PrecioIva);
+            data.Add("Fecha_creacion", producto.FechaCreacion);
+            data.Add("Fecha_modificacion", DateTime.Now);
+            data.Add("Baja", producto.Baja);
+            data.Add("Seg_stock", producto.SegStock);
+            string whereClause = "Id = " + producto.Id;
+            bool ok = _dbConnection.Update("Persona", data, whereClause, out string errorMessage);
+            if (ok)
+            {
+                if (producto.Stock != null) ActualizarStockProducto(producto.Stock);
+                if (producto.Imagen != null) ActualizarImagenProducto(producto.Imagen);
+            }
+            return ok;
+        }
+        public bool ActualizarStockProducto(Stock stock)
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data.Add("Stock", stock.StockProducto);
+            string whereClause = "Id = " + stock.IdStock;
+
+            return _dbConnection.Update("Stock", data, whereClause, out string errorMessage);
+        }
+        public bool ActualizarImagenProducto(Imagen imagen)
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data.Add("Imagen", imagen.Image);
+            string whereClause = "Id = " + imagen.Id;
+
+            return _dbConnection.Update("Imagen", data, whereClause, out string errorMessage);
+        }
 
         //DELETES
         public bool EliminarVecino(int id)
         {
             return _dbConnection.Delete("Persona", "ID", id, out string errorMessage);
         }
-
+        public bool EliminarCuota(int id)
+        {
+            return _dbConnection.Delete("Cuota", "ID", id, out string errorMessage);
+        }
+        
         //SELECTS
         public IEnumerable<Tipo_Persona> SelectTiposPersona(object parameters = null)
         {
@@ -138,12 +234,45 @@ namespace TP_Gestion.Acceso_a_datos
                 splitOn: "TipoId" // Indica que se divide el mapeo en esta columna
             );
         }
-
-        public IEnumerable<Cuota> SelectCuotasAnual(int anioConsulta)
+        public IEnumerable<Producto> SelectVerProductos(string filtroNombre, decimal? precioMin, 
+            decimal? precioMax, bool? baja)
         {
-            var parameters = new { AnioConsulta = anioConsulta };
+            var parameters = new
+            {
+                PrecioMin = precioMin,
+                PrecioMax = precioMax,
+                FiltroNombre = filtroNombre,
+                BajaChecked = baja
+            };
+            return _dbConnection.ExecuteQuery<Producto, Stock>(
+                SQLQueries.GetProductos,
+                (producto, stock) =>
+                {
+                    producto.Stock = stock; 
+                    return producto;
+                },
+                parameters,
+                splitOn: "Id_producto" 
+            );
+        }
+        public IEnumerable<Cuota> SelectCuotasAnual(int anioConsulta, string nombre, bool? pagado)
+        {
+            var parameters = new { 
+                AnioConsulta = anioConsulta,
+                FiltroNombre = nombre,
+                FiltroPagado = pagado
+            };
 
-            return _dbConnection.ExecuteQuery<Cuota>(SQLQueries.GetCuotas,parameters);
+            return _dbConnection.ExecuteQuery<Cuota, Persona>(
+                SQLQueries.GetCuotas,
+                (cuota, persona) =>
+                {
+                    cuota.Persona = persona; // Asigna el objeto Tipo_Persona a la persona
+                    return cuota;
+                },
+                parameters,
+                splitOn: "IdPersona" // Indica que se divide el mapeo en esta columna
+            );
         }
     }
 }

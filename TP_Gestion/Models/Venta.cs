@@ -12,14 +12,16 @@ namespace TP_Gestion.Models
         {
         }
 
-        public Venta(long idPersona, decimal total, decimal totalIva, 
-            DateTime fechaVenta, string observaciones, List<LineaVenta> lineaVentaList)
+        public Venta(long idPersona, decimal total, decimal totalIva, DateTime fechaVenta, 
+            string observaciones, bool rectificativa, long idRect, List<LineaVenta> lineaVentaList)
         {
             IdPersona = idPersona;
             Total = total;
             TotalIva = totalIva;
             FechaVenta = fechaVenta;
             Observaciones = observaciones;
+            Rectificativa = rectificativa;
+            IdRectificada = idRect;
             LineaVentaList = lineaVentaList;
         }
 
@@ -29,6 +31,8 @@ namespace TP_Gestion.Models
         public decimal TotalIva { get; set; }
         public DateTime FechaVenta { get; set; }
         public string Observaciones{ get; set; }
+        public bool Rectificativa{ get; set; }
+        public long IdRectificada{ get; set; }
         public List<LineaVenta> LineaVentaList { get; set; }
 
     }

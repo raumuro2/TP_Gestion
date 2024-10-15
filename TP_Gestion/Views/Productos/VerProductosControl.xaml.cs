@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using TP_Gestion.Acceso_a_datos;
+using TP_Gestion.ViewModels;
+
+namespace TP_Gestion.Views.Productos
+{
+    /// <summary>
+    /// Lógica de interacción para VerProductosControl.xaml
+    /// </summary>
+    public partial class VerProductosControl : UserControl
+    {
+        public VerProductosControl(SQLService sqlService)
+        {
+            InitializeComponent();
+            DataContext = new PersonaViewModel(sqlService);
+        }
+    }
+}

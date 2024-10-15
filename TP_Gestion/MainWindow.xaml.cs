@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TP_Gestion.Acceso_a_datos;
 using TP_Gestion.Views.Cuotas;
+using TP_Gestion.Views.Productos;
 using TP_Gestion.Views.R._Vecinos;
 
 namespace TP_Gestion
@@ -78,6 +79,17 @@ namespace TP_Gestion
         {
             CuotasControl cuotasContral = new CuotasControl(_sqlService);
             contentControl.Content = cuotasContral;
+        }
+
+        private void menuItem_VerProductos_Click(object sender, RoutedEventArgs e)
+        {
+            VerProductosControl verProductosControl = new VerProductosControl(_sqlService);
+            contentControl.Content= verProductosControl;
+        }
+
+        private void menuItem_CrearProductos_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -92,11 +92,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Productos\CrearProductoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Cuotas\CuotasControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PopUp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Productos\VerProductosControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -120,19 +128,29 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Cuota.cs" />
+    <Compile Include="Models\Imagen.cs" />
     <Compile Include="Models\LineaVenta.cs" />
     <Compile Include="Models\MovContable.cs" />
     <Compile Include="Models\Producto.cs" />
+    <Compile Include="Models\Stock.cs" />
     <Compile Include="Models\Venta.cs" />
     <Compile Include="ViewModels\AltaVecinoViewModel.cs" />
+    <Compile Include="ViewModels\CrearProductoViewModel.cs" />
+    <Compile Include="Views\Productos\CrearProductoWindow.xaml.cs">
+      <DependentUpon>CrearProductoWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\CuotasViewModel.cs" />
     <Compile Include="ViewModels\PersonaViewModel.cs" />
+    <Compile Include="ViewModels\VerProductosViewModel.cs" />
     <Compile Include="Views\Cuotas\BooleanToVisibilityConverter .cs" />
     <Compile Include="Views\Cuotas\CuotasControl.xaml.cs">
       <DependentUpon>CuotasControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PopUp.xaml.cs">
       <DependentUpon>PopUp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Productos\VerProductosControl.xaml.cs">
+      <DependentUpon>VerProductosControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\R. Vecinos\AltaVecinoWindow.xaml.cs">
       <DependentUpon>AltaVecinoWindow.xaml</DependentUpon>

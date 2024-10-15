@@ -18,6 +18,7 @@ namespace TP_Gestion.ViewModels
         private ObservableCollection<Cuota> _cuotas;
         private string _searchText;
         private string _selectedTipoFiltro;
+        private bool? selectedPagado = null;
         private int _selectedYear;
         private Cuota _selectedCuota;
 
@@ -48,6 +49,18 @@ namespace TP_Gestion.ViewModels
             set
             {
                 _selectedTipoFiltro = value;
+                if(_selectedTipoFiltro == "Todos")
+                {
+                    selectedPagado = null;
+                }
+                else if (_selectedTipoFiltro == "Pagado")
+                {
+                    selectedPagado = true;
+                }
+                else
+                {
+                    selectedPagado = false;
+                }
                 OnPropertyChanged(nameof(SelectedTipoFiltro));
             }
         }
@@ -106,7 +119,7 @@ namespace TP_Gestion.ViewModels
 
         private void LoadCuotas()
         {
-            Cuotas = new ObservableCollection<Cuota>(_sqlService.SelectCuotasAnual(SelectedYear));
+            Cuotas = new ObservableCollection<Cuota>(_sqlService.SelectCuotasAnual(SelectedYear, _searchText, selectedPagado));
         }
         private void LoadYears()
         {
@@ -150,8 +163,6 @@ namespace TP_Gestion.ViewModels
 
         private void HacerPago()
         {
-            
-            
             //Se debería de obtener el producto mediante una consulta
             List<LineaVenta> lineaVentas = new List<LineaVenta>() 
             { 
@@ -188,7 +199,14 @@ namespace TP_Gestion.ViewModels
 
         private void DeshacerPago()
         {
-
+            Venta venta = new Venta()
+            {
+                IdPersona = SelectedCuota.Id,
+                FechaVenta = DateTime.Now.Date,
+                IdRectificada = SelectedCuota.IdVenta,
+            };
+            bool okVenta = _sqlService.CrearVentaRectificativa(venta, out long id);
+            _sqlService.EliminarCuota(SelectedCuota.Id);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -198,7 +216,5 @@ namespace TP_Gestion.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-
-    
 }
 

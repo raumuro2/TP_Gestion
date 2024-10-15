@@ -102,11 +102,11 @@ ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{Stati
       CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
             </DataGrid.InputBindings>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Nº" Width="50" Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="NOMBRE" Width="*" Binding="{Binding Nombre}"/>
-                <DataGridTextColumn Header="APELLIDOS" Width="*" Binding="{Binding Apellidos}"/>
-                <DataGridTextColumn Header="CASA" Width="*" Binding="{Binding Casa}"/>
-                <DataGridTextColumn Header="REGISTRO" Width="*" Binding="{Binding FechaRegistro, StringFormat=dd/MM/yyyy}"/>
+                <DataGridTextColumn Header="Nº" Width="50" Binding="{Binding Persona.Id}"/>
+                <DataGridTextColumn Header="NOMBRE" Width="*" Binding="{Binding Persona.Nombre}"/>
+                <DataGridTextColumn Header="APELLIDOS" Width="*" Binding="{Binding Persona.Apellidos}"/>
+                <DataGridTextColumn Header="CASA" Width="*" Binding="{Binding Persona.Casa}"/>
+                <DataGridTextColumn Header="FECHA" Width="*" Binding="{Binding Fecha, StringFormat=dd/MM/yyyy}"/>
                 <DataGridTemplateColumn Header="P" Width="70">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

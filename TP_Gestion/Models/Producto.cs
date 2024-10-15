@@ -13,7 +13,11 @@ namespace TP_Gestion.Models
         public decimal Precio { get; set; }
         public decimal PrecioIva { get; set; }
         public bool SegStock { get; set; }
+        public bool Baja { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaModificacion{ get; set; }
+        public Stock Stock{ get; set; }
+        public Imagen Imagen{ get; set; }
+
     }
 }
