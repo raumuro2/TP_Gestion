@@ -6,6 +6,8 @@ Este proyecto es una aplicación de escritorio desarrollada en C# utilizando WPF
 
 La aplicación surge como respuesta al crecimiento de la asociación de vecinos, haciendo insostenible la gestión tradicional. El objetivo es proporcionar una herramienta a medida que facilite la administración para los encargados de la asociación.
 
+![image](https://github.com/user-attachments/assets/3236ba37-0da8-4bfe-a923-5963eee0c7d0)
+
 ## Características principales
 
 - Registro y gestión de vecinos
