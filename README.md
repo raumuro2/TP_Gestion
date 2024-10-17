@@ -50,7 +50,7 @@ Las contribuciones son bienvenidas. Por favor, abre un issue para discutir los c
 
 ## Licencia
 
-Este proyecto está licenciado bajo la Licencia MIT. Ver [LICENCIA](LISCENSE.txt) para detalles.
+Este proyecto está licenciado bajo la Licencia MIT. Ver [LICENCIA](LICENSE.txt) para detalles.
 
 ## Contacto
 
